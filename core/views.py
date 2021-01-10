@@ -36,8 +36,11 @@ class CheckOutView(View):
                 apartment_address = form.cleaned_data['apartment_address']
                 zip = form.cleaned_data['zip']
                 country = form.cleaned_data['country']
-                same_billing_address = form.cleaned_data['same_billing_address']
-                save_info = form.cleaned_data['save_info']
+
+                # Todo: add function for this
+                # same_shipping_address = form.cleaned_data['same_billing_address']
+                # save_info = form.cleaned_data['save_info']
+
                 payment_option = form.cleaned_data['payment_option']
                 billing_address = BillingAddress(
                     user=self.request.user,
@@ -50,6 +53,7 @@ class CheckOutView(View):
                 order.billing_address = billing_address
                 order.save()
 
+                # Todo: redirect to the payment method
                 return redirect('core:checkout')
         except ObjectDoesNotExist:
             messages.error(self.request, 'You have no active item!')
@@ -59,7 +63,9 @@ class CheckOutView(View):
         messages.warning(self.request, 'fail form')
         return redirect('core:checkout')
 
-
+class PaymentView(View):
+    def get(self, *args, **kwargs):
+        return render(self.request, 'payment.html')
 
 # def product(request):
 #     items = Item.objects.all()
